@@ -1,0 +1,86 @@
+<!doctype html>
+<html ng-app>
+
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html">
+      <title>Github API Web-App</title>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" media="all" href="Style.css">
+      <script src="git-calendar.js"></script>
+      <link rel="stylesheet" type="text/css" media="all" href="git-calendar.css"> 
+</head>
+
+<body ng-controller="GitCtrl">
+       <h1 class="jumbotron" >Github API Web-App</h1>
+      <div id="w" class="container">
+            <div>
+                  
+                  <p class="text-center">Enter any Github username below and click to display profile info.</p><br>
+                  <input class="form-control" type="text" id="ghusername" ng-model="username" placeholder="Github username...">
+                  <br>
+                  <a href="#" id="ghsubmitbtn" class="btn btn-primary" ng-click="getGitInfo()">
+                        <span class="glyphicon glyphicon-cloud-download"></span>&nbsp Extract User Data
+                  </a>
+                              
+                  <div id="ghapidata" class="clearfix"></div>
+            </div>
+            <div ng-show="userNotFound">
+                  <h4 class="alert alert-danger">No User Info Found</h4>
+            </div>
+            <div ng-show="loaded" class="break">
+                  <div class="container">
+                  <div class="col-md-4">
+                        <h3><strong>{{user.name}}</strong></h3>
+                        <div class="ghcontent">
+                              <div class="avi">
+                                    <a href="{{ user.html_url }}" target="_blank">
+                                          <img src="{{ user.avatar_url }}" class="img-fluid" alt="{{ user.login }}">
+                                    </a>
+                              </div>
+                        </div>
+                  </div>
+                  <div class="col-md-8">
+                        <br><br><br>
+                        <h4><strong>Profiles link: </strong> <span>@<a href="{{user.html_url}}" target="_blank"> {{user.login}} </a></span></h4>
+                        <h5><strong>Repos: </strong>{{ user.public_repos }} &nbsp <strong>Followers: </strong> {{ user.followers }} &nbsp<strong>Following: </strong> {{ user.following }}</>
+                        <div class="calendar" >Loading the data...</div>
+                        </div>
+                  </div>
+                  <br><hr><br>
+                  <p ng-hide="reposFound" class="text-danger">No repos!</p>
+                  <div ng-show="reposFound" >
+                        <p><strong>Repos List:</strong></p>
+                        <div class="repolist" ng-repeat="repo in repos">
+                             <a class="btn btn-primary" href="{{repo.html_url}}" target="_blank"> {{repo.name}} </a>
+                        </div>
+                  </div>
+            </div>
+      </div>
+	<script>
+            function GitCtrl($scope, $http) {
+			$scope.getGitInfo = function () {
+				$scope.userNotFound = false;
+				$scope.loaded = false;
+				$http.get("https://api.github.com/users/" + $scope.username).success(function (data) {
+					if (data.name == "") data.name = data.login;
+					$scope.user = data;
+					$scope.loaded = true;
+					console.log($scope.username);
+					GitHubCalendar(".calendar", $scope.username);
+				}).error(function () {
+					$scope.userNotFound = true;
+				});
+				$http.get("https://api.github.com/users/" + $scope.username + "/repos").success(function (data) {
+					$scope.repos = data;
+					$scope.reposFound = data.length > 0;
+				});
+			}
+		}
+      </script>
+</body>
+
+</html>

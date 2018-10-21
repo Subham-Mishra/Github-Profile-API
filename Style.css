@@ -1,0 +1,33 @@
+html {
+    overflow-x: hidden;
+}
+.jumbotron {
+    background-color: rgb(48, 102, 146);
+    color: floralwhite; 
+    text-align: center;
+}
+p {
+    font-size: 18px;
+}
+#ghsubmitbtn {
+    float:right;
+}
+img {
+    border-radius: 15px;
+    width:100%;
+    height: 450px;;
+}
+.repolist {
+    font-weight: bold;
+    display: block;
+    float: left;
+    padding: 8px;
+    text-decoration: none;
+}
+.calendar {
+    margin-top: 20px !important;
+    margin-bottom: 10px !important;
+}
+.break {
+    margin-bottom: 150px !important;
+}
