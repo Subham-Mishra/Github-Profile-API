@@ -31,3 +31,9 @@ img {
 .break {
     margin-bottom: 150px !important;
 }
+hr {
+    border: none;
+    height: 1px;
+    color: #333; /* old IE */
+    background-color: #333; /* Modern Browsers */
+}
