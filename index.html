@@ -25,6 +25,7 @@
 			<a href="#" id="ghsubmitbtn" class="btn btn-primary" ng-click="getGitInfo()"> <span class="glyphicon glyphicon-cloud-download"></span>&nbsp Extract User Data</a>
 			<div id="ghapidata" class="clearfix"></div>
 		</div>
+		<hr>
 		<div ng-show="userNotFound">
 			<h4 class="alert alert-danger">No User Info Found</h4>
 		</div>
@@ -42,10 +43,9 @@
 				</div>
 				<div class="col-md-8">
 					<br>
-					<hr>
 					<br>
 					<h4><strong>Profiles link: </strong> <span>@<a href="{{user.html_url}}" target="_blank"> {{user.login}} </a></span></h4>
-					<h5><strong>Repos: </strong>{{ user.public_repos }} &nbsp <strong>Followers: </strong> {{ user.followers }} &nbsp<strong>Following: </strong> {{ user.following }}</>
+					<h5><strong>Repos: </strong>{{ user.public_repos }} &nbsp <strong>Followers: </strong> {{ user.followers }} &nbsp<strong>Following: </strong> {{ user.following }}</input>
                         <div class="calendar" >Loading the data...</div>
                         </div>
                   </div>
@@ -57,16 +57,19 @@
                              <a class="btn btn-primary" href="{{repo.html_url}}" target="_blank"> {{repo.name}} </a>
                         </div>
                   </div>
-            </div>
-	    <hr>
-      </div>
+			</div>
+			<br>
+			<hr>
+	  </div>
+	  
 	<script>
-            function GitCtrl($scope, $http) {
+            function GitCtrl($scope, $http) {	
 			$scope.getGitInfo = function () {
+				$scope.username='subham-mishra';
 				$scope.userNotFound = false;
 				$scope.loaded = false;
-				$http.get("https://api.github.com/users/" + $scope.username).success(function (data) {
-					if (data.name == "") data.name = data.login;
+				for(i=0;i<$scope.username.length;i++) {
+					$http.get("https://api.github.com/users/" + $scope.username).success(function (data) {
 					$scope.user = data;
 					$scope.loaded = true;
 					console.log($scope.username);
@@ -78,6 +81,7 @@
 					$scope.repos = data;
 					$scope.reposFound = data.length > 0;
 				});
+				}
 			}
 		}
       </script>
